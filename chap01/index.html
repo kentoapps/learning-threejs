@@ -27,8 +27,12 @@
     //　すべての読み込みが終わってからThree.js関連の処理を実行します
     function init() {
         var stats = initStats();
+
+        // Create scene
         scene = new THREE.Scene();
+        // Create camera
         camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        // Create renderer
         renderer = new THREE.WebGLRenderer();
         renderer.setClearColor(new THREE.Color(0xEEEEEE));
         renderer.setSize(window.innerWidth, window.innerHeight);
