@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple</title>
+    <script src="../libs/three.js"></script>
+    <script src="../libs/dat.gui.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<div id="WebGL-output"></div>
+
+<script>
+    function init() {
+        var scene = new THREE.Scene();
+
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 100);
+        camera.position.set(-30, 40, 30);
+        camera.lookAt(scene.position);
+
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setClearColor(new THREE.Color(0xEEEEEE));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+
+        var axes = new THREE.AxisHelper(20);
+        scene.add(axes);
+
+        var plane = new THREE.Mesh(
+            new THREE.PlaneGeometry(60, 20),
+            new THREE.MeshLambertMaterial({color: 0x888888}));
+        plane.rotation.x = -0.5 * Math.PI;
+        plane.position.set(15, 0, 0);
+        plane.receiveShadow = true;
+        scene.add(plane);
+
+        var sphere = new THREE.Mesh(
+            new THREE.SphereGeometry(4, 20, 20),
+            new THREE.MeshLambertMaterial({color: 0x88ffff}));
+        sphere.position.set(0, 4, 2);
+        sphere.castShadow = true;
+        scene.add(sphere);
+
+        var cube = new THREE.Mesh(
+            new THREE.BoxGeometry(5, 5, 5),
+            new THREE.MeshLambertMaterial({color: 0xffff88}));
+        cube.position.set(8, 10, 10);
+        cube.castShadow = true;
+        scene.add(cube);
+
+        var light = new THREE.SpotLight(0xFFFFFF);
+        light.position.set(-20, 30, 5);
+        light.castShadow = true;
+        scene.add(light);
+
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
+
+        // init dat.gui
+        var controls = new function () {
+            this.rotationSpeed = 0.02;
+        }
+        var gui = new dat.GUI();
+        gui.add(controls, 'rotationSpeed', 0, 0.5);
+
+        render();
+
+        function render() {
+            cube.rotation.x += controls.rotationSpeed;
+            cube.rotation.y += controls.rotationSpeed;
+            cube.rotation.z += controls.rotationSpeed;
+            requestAnimationFrame(render);
+            renderer.render(scene, camera);
+        }
+    }
+
+    window.onload = init();
+</script>
+
+</body>
+</html>
