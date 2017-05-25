@@ -1,0 +1,64 @@
+<!doctype html>
+<!--
+1. ライブラリをインポート
+2. outputするdivを作成
+3. window.onLoadで描画する処理を書く
+4. シーン、カメラ、レンダラ作成
+5. プレーンメッシュ作成
+6. ライト作成
+7. outputに出力
+8. レンダー
+================================================== -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../libs/three.js"></script>
+    <script src="../libs/dat.gui.js"></script>
+</head>
+<body>
+<div id="WebGL-output"></div>
+<script>
+    function init() {
+        var scene = new THREE.Scene();
+
+        var camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 100);
+        camera.position.set(-30, 40, 30);
+        camera.lookAt(scene.position);
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setClearColor(0xdddddd);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap = true;
+
+        var plane = new THREE.Mesh(
+            new THREE.PlaneGeometry(60, 20),
+            new THREE.MeshLambertMaterial({color: 0xffffff}));
+        plane.rotation.x = -0.5 * Math.PI;
+        plane.position.set(15, 0, 0);
+        plane.receiveShadow = true;
+        scene.add(plane);
+
+        var light = new THREE.SpotLight(0xFFFFFF);
+        light.position.set(-20, 30, 5);
+        light.castShadow = true;
+        scene.add(light);
+
+
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
+        render();
+
+        function render() {
+
+            requestAnimationFrame(render);
+            renderer.render(scene, camera);
+        }
+    }
+
+    window.onload = init();
+</script>
+
+</body>
+</html>
